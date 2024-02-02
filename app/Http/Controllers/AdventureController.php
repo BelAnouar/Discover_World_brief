@@ -51,7 +51,13 @@ class AdventureController extends Controller
     public function create()
     {
         $continents = destination::all();
-        return view("adventure.create", ["continents" => $continents]);
+        if (Auth::check()) {
+
+            return view("adventure.create", ["continents" => $continents]);
+        } else {
+
+            return redirect()->route('login');
+        }
     }
 
     /**
