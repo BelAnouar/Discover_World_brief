@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AdventureRequest;
 use App\Models\Adventure;
 use App\Models\destination;
+use App\Models\Image;
 use Illuminate\Http\Request;
 
 class AdventureController extends Controller
@@ -15,11 +16,31 @@ class AdventureController extends Controller
     public function index(Request $request)
     {
         $continent = $request->input('continant');
+        $filter = $request->input('filter');
         // $adventures = Adventure::with('images', "destination")->get();
 
-        $adventures = Adventure::with('images', 'destination')->when($continent,  fn ($query, $continent) => $query->byContinent($continent))
+        $adventures = Adventure::with('images', 'destination')->when($continent,  fn ($query, $continent) => $query->byContinent($continent));
 
-            ->paginate(6);
+        $adventures = match ($filter) {
+
+            'old' => $adventures->oldest(),
+            default => $adventures->latest()
+        };
+
+        $cacheKey = 'adventures:' . $filter . ':' . $continent;
+        $adventures = $adventures->paginate(6);
+        // $adventures =
+        //     cache()->remember(
+        //         $cacheKey,
+        //         3600,
+        //         fn () =>
+        //         $adventures
+        //     );
+
+
+
+
+
         return view("adventure.index", ["adventures" => $adventures]);
     }
 
@@ -28,7 +49,8 @@ class AdventureController extends Controller
      */
     public function create()
     {
-        //
+        $continents = destination::all();
+        return view("adventure.create", ["continents" => $continents]);
     }
 
     /**
@@ -37,7 +59,20 @@ class AdventureController extends Controller
     public function store(AdventureRequest $request)
     {
         $data = $request->validated();
-        Adventure::create(array_merge($data, ["user_id" => 1]));
+        // dd($request->images);
+        $result = Adventure::create(array_merge($data, ["user_id" => 1]));
+
+        if ($request->hasFile('images')) {
+            foreach ($request->images as $uploadedImage) {
+                $image = new Image();
+                $image->adventure_id = $result->id;
+                $image->image_path  = $uploadedImage->store('images', 'public');
+
+                $image->save();
+            }
+        }
+
+        return redirect("adventure");
     }
 
     /**
@@ -45,7 +80,10 @@ class AdventureController extends Controller
      */
     public function show(Adventure $adventure)
     {
-        //
+
+        $adventure = Adventure::with('images', 'user')->find($adventure->id);
+
+        return view('adventure.show', ['adventure' => $adventure]);
     }
 
     /**

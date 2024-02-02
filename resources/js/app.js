@@ -1,5 +1,5 @@
 
-import "alpinejs";
+import "./bootstrap";
 
 
 

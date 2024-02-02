@@ -46,6 +46,25 @@
     <button type="submit" class="btn h-10">Search</button>
     <a href="{{ route('adventure.index') }}" class="btn h-10">Clear</a>
   </form>
+  <div class="filter-container mb-4 flex">
+    @php
+      $filters = [
+          '' => 'Latest',
+          'old' => 'old',
+
+      ];
+    @endphp
+
+    @foreach ($filters as $key => $label)
+      <a href="{{ route('adventure.index', [...request()->query(), 'filter' => $key]) }}"
+        class="{{ request('filter') === $key || (request('filter') === null && $key === '') ? 'filter-item-active' : 'filter-item' }}">
+        {{ $label }}
+      </a>
+    @endforeach
+  </div>
+
+
+
   <ul class="grid md:grid-cols-2 lg:grid-cols-3 gap-4" x-data="{ currentSlide: 0, totalSlides: {{ $adventures->count() }}, autoplay: true }">
     @forelse ($adventures as $adventure)
     <li >
