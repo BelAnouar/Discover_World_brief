@@ -22,7 +22,7 @@
                             <a href="{{ route('adventure.index') }}"
                                 class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white px-4 ">Adventure</a>
                             @auth
-                                <a href="{{ url('/') }}"
+                                <a href=" / "
                                     class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Home</a>
                             @else
                                 <a href="{{ route('login') }}"
@@ -159,9 +159,11 @@
                     </div>
                 </a>
             @endforeach
-        <div class="mx-auto flex justify-between">
-            {!! $distinations->links() !!}</div>
+        
+           
         </div>
+        <div class="py-2 px-8">
+         {{$distinations->links() }}</div>
     </section>
 
 
