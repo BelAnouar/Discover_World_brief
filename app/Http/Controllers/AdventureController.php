@@ -12,10 +12,15 @@ class AdventureController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $continents = destination::all();
-        return view("adventure.index", ["continents" => $continents]);
+        $continent = $request->input('continant');
+        // $adventures = Adventure::with('images', "destination")->get();
+
+        $adventures = Adventure::with('images', 'destination')->when($continent,  fn ($query, $continent) => $query->byContinent($continent))
+
+            ->paginate(6);
+        return view("adventure.index", ["adventures" => $adventures]);
     }
 
     /**

@@ -37,7 +37,7 @@
         </div>
     </header>
 
-    <section class="py-16" style=>
+    <section class="py-16" >
         <div class="container mx-auto md-px-20">
             <h1 class="font-bold text-4xl pb-12 text-center">Adventure</h1>
             <div class="w-full carousel ">
@@ -114,68 +114,42 @@
         <h1 class="font-bold text-4xl text-center py-4">Lastest Posts</h1>
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            @foreach ($adventures as $adventure)
             <div class="item">
-                <div class="images">
-                    <a href="/">
-                        <img src="/images/adv.jpg" class="rounded"  alt="post" />
-                        {{-- <Image src="/Images/img1.jpg" class="rounded" width={500} height={350} /> --}}
-                    </a>
-
+                <div x-data="{ currentSlide: 0, totalSlides: {{ count($adventure->images) }} }">
+                    <div class="images carousel " >
+                        @foreach ($adventure->images as $image)
+                            <div class="carousel-item w-full active" >
+                                <img src="{{ $image->image_path }}" class="rounded" alt="post" />
+                            </div>
+                        @endforeach
+                    </div>
+                
+                 
                 </div>
+                
                 <div class="info flex justify-content flex-col py-4">
-                    <div class="cat">
-                        <a href="/" class="text-orange-600 hover:text-orange-800">
-                            Business Travel
-                        </a>
-                        <a href="/" class="text-gray-600 hover:text-gray-800">
-                            July 3-20
-                        </a>
+                    <div class="flex gap-2">
+                        <p href="/" class="text-orange-600 hover:text-orange-800">
+                             Travel
+                        </p>
+                        <p href="/" class="text-gray-600 hover:text-gray-800">
+                            {{$adventure->created_at->format('F j, Y')}}
+                        </p>
                     </div>
                     <div class="title">
                         <a href="/" class="text-xl font-bold text-gray-800 hover:text-gray-600 ">
-                            Your most unhappy customers are your greatest source of learning
+                            {{$adventure->title}}
                         </a>
-
+    
                     </div>
-                    <p class="text-gray-500 py-3">
-                        Even the all-powerful Pointing has no control about the blind texts it is an almost
-                        unorthographic life One day however a small line of blind
-                        text by the name of Lorem Ipsum decided to leave for the far World of Grammar.
-                    </p>
-
+                    <p class="text-gray-500 ">
+                        <p>{{ Str::limit($adventure->description, 100) }}  
+                        <a href="{{ route('adventure.show', $adventure) }}"class="text-blue-600">Read more </a>
+                        </p>
                 </div>
             </div>
-            <div class="item">
-                <div class="images">
-                    <a href="/">
-                        <img src="/images/adv.jpg" class="rounded" width={500} height={350} alt="post" />
-                        {{-- <Image src="/Images/img1.jpg" class="rounded" width={500} height={350} /> --}}
-                    </a>
-
-                </div>
-                <div class="info flex justify-content flex-col py-4">
-                    <div class="cat">
-                        <a href="/" class="text-orange-600 hover:text-orange-800">
-                            Business Travel
-                        </a>
-                        <a href="/" class="text-gray-600 hover:text-gray-800">
-                            July 3-20
-                        </a>
-                    </div>
-                    <div class="title">
-                        <a href="/" class="text-xl font-bold text-gray-800 hover:text-gray-600 ">
-                            Your most unhappy customers are your greatest source of learning
-                        </a>
-
-                    </div>
-                    <p class="text-gray-500 py-3">
-                        Even the all-powerful Pointing has no control about the blind texts it is an almost
-                        unorthographic life One day however a small line of blind
-                        text by the name of Lorem Ipsum decided to leave for the far World of Grammar.
-                    </p>
-
-                </div>
-            </div>
+          @endforeach
         </div>
     </section>
 

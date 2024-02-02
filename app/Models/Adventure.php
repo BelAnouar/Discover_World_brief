@@ -13,9 +13,11 @@ class Adventure extends Model
 
     protected $fillable = ['title', 'description', 'consiel', 'user_id', 'destination_id'];
 
-    public function scopeDestination(Builder $query, string $destination): Builder
+    public function scopeByContinent($query, $continent)
     {
-        return $query->where('continent', 'LIKE', '%' . $destination . '%');
+        return $query->whereHas('destination', function ($query) use ($continent) {
+            $query->where('continent', $continent);
+        });
     }
     public function user()
     {
@@ -24,7 +26,7 @@ class Adventure extends Model
 
     public function destination()
     {
-        return $this->belongsTo(Destination::class);
+        return $this->belongsTo(destination::class);
     }
 
     public function images()
