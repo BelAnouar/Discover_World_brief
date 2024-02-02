@@ -10,8 +10,9 @@
                 placeholder="Search.." />
         </div>
         <div class="shrink  sm:order-2 px-3">
+            <a href="{{ url('/') }}">
             <img src="{{ asset('images/logoDW.png') }}" class="w-52" alt="logo">
-        </div>
+            </a></div>
         <div class="w-96 order-3 flex justify-center">
             <div class="flex gap-6">
                 @if (Route::has('login'))

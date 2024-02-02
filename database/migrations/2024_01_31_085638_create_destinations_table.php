@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('destinations', function (Blueprint $table) {
             $table->id();
             $table->string('continent');
-            $table->longText('description')->nullable();
-            $table->timestamps();
+
+
             $table->string('image');
+            $table->timestamps();
         });
     }
 

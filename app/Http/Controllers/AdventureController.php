@@ -7,6 +7,7 @@ use App\Models\Adventure;
 use App\Models\destination;
 use App\Models\Image;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdventureController extends Controller
 {
@@ -60,13 +61,17 @@ class AdventureController extends Controller
     {
         $data = $request->validated();
         // dd($request->images);
-        $result = Adventure::create(array_merge($data, ["user_id" => 1]));
+        $result = Adventure::create(array_merge($data, ["user_id" => Auth::id()]));
 
-        if ($request->hasFile('images')) {
-            foreach ($request->images as $uploadedImage) {
+        if ($request->file('image')) {
+
+            foreach ($request->image as $uploadedImage) {
+                $filename = date('YmdHi') . $uploadedImage->getClientOriginalName();
+                $uploadedImage->move(public_path('images'), $filename);
+                $data['image'] = $filename;
                 $image = new Image();
                 $image->adventure_id = $result->id;
-                $image->image_path  = $uploadedImage->store('images', 'public');
+                $image->image_path  = "images/" . $filename;
 
                 $image->save();
             }

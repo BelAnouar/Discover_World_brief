@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Adventure;
+use App\Models\destination;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -24,6 +26,17 @@ class HomeController extends Controller
     public function index()
     {
         $adventures = Adventure::with('images', 'destination')->limit(6)->get();
-        return view('welcome', ["adventures" => $adventures]);
+        $countAdventure = Adventure::all()->count();
+        $countUser = User::all()->count();
+        $countDestination = destination::all()->count();
+        $distinations = destination::simplePaginate(6);
+
+        return view('welcome', [
+            "adventures" => $adventures,    "countAdventure" => $countAdventure,
+            "countUser" => $countUser,
+            "countDestination" => $countDestination,
+            "distinations" => $distinations
+
+        ]);
     }
 }
