@@ -30,7 +30,13 @@ class HomeController extends Controller
         $countUser = User::all()->count();
         $countDestination = destination::all()->count();
         $distinations = destination::simplePaginate(6);
-
+        $adventures =
+            cache()->remember(
+                "adventure",
+                3600,
+                fn () =>
+                $adventures
+            );
         return view('welcome', [
             "adventures" => $adventures,    "countAdventure" => $countAdventure,
             "countUser" => $countUser,

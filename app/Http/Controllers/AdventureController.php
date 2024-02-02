@@ -28,7 +28,7 @@ class AdventureController extends Controller
             default => $adventures->latest()
         };
 
-        $cacheKey = 'adventures:' . $filter . ':' . $continent;
+        // $cacheKey = 'adventures:' . $filter . ':' . $continent;
         $adventures = $adventures->paginate(6);
         // $adventures =
         //     cache()->remember(
@@ -93,7 +93,13 @@ class AdventureController extends Controller
     {
 
         $adventure = Adventure::with('images', 'user')->find($adventure->id);
-
+        $adventure =
+            cache()->remember(
+                "adventure",
+                3600,
+                fn () =>
+                $adventure
+            );
         return view('adventure.show', ['adventure' => $adventure]);
     }
 
