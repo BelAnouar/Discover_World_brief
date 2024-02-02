@@ -65,6 +65,13 @@
   </div>
 
 
+  <div class="py-4">
+
+    <div class="flex justify-end" id="button">
+        <a href=" {{ route('adventure.create')}}" class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-4 sm:px-8 py-2 text-xs sm:text-sm" >add adventure</a>
+    </div>
+  </div>
+
 
   <ul class="grid md:grid-cols-2 lg:grid-cols-3 gap-4" x-data="{ currentSlide: 0, totalSlides: {{ $adventures->count() }}, autoplay: true }">
     @forelse ($adventures as $adventure)
